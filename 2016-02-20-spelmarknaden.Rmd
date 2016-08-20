@@ -1,7 +1,15 @@
 ---
 title: "Den svenska spelmarknaden, bortom genomsnittet"
 date: "Februari, 2016"
-output: html_document
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+link-citations: yes
 ---
 
 ```{r, include=FALSE}
