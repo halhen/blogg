@@ -1,0 +1,178 @@
+---
+runtime: shiny
+output: tufte::tufte_html
+title: "Om återbetalning och risk"
+date: "2016-08-27"
+link-citations: yes
+references:
+- id: meyer2011
+  title: Development of an assessment tool to evaluate the risk potential of different gambling types
+  author:
+  - family: Meyer
+    given: Gerhard
+  container-title: International Gambling Studies
+  volume: 11
+  issue: 2
+  page: 221-236
+  type: article-journal
+  issued:
+    year: 2011
+    month: 07
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+I veckan ställdes på speldebattens Forum Romanum -- Twitter -- frågan om huruvida [återbetalningen i spel bör regleras](https://twitter.com/Spelnykter/status/768379888655106048). Redbarhetens riddare kastade snabbt handsken [i de stackars problemspelarnas namn](https://twitter.com/likavillkor_nu/status/768471031195561985), även om man strax medgav att sakfrågan man så hjärteligt fäktades för [även kunde tänkas berika både dem själva och tvekampens domare](https://twitter.com/likavillkor_nu/status/768471874011561984). Motståndarsidan [öppnade tveksamt](https://twitter.com/GustafHoffstedt/status/768450149882421248) men svingade strax den [den beryktade forskningsklingan](https://twitter.com/HattenHelander/status/768499662752014336).
+
+Tyvärr hade kombattaterna, precis som fallet brukar vara i denna sorgliga idrott, inte enats om tvekampens regler. Slutet blev som det brukar: artiga hattlyft och tack för ingenting. En kort kamp mellan en schackspelare och en fotbollsmålvakt. I full hockey-mundering. På botten av en pool. 
+
+Vi borde verkligen bestämma oss för vad den här sporten går ut på.
+
+Nåväl. Eftersom undertecknad trots allt har en fäbless för fakta, verkar detta ett bra tillfälle att fördjupa [förra veckans artikel om farliga spel](http://rpubs.com/halhen/farliga-spel). Här följer en genomgång av en av de utlovade mer sofistikerade modellerna för att klassificera risk i spel.
+
+@meyer2011 bygger en modell genom kombinera expertutlåtande med att fråga spelare vilka spel de själva får problem av. Slutresultatet är en lista på tio faktorer som tillsammans förklarar lite drygt 80% av vad i spel som ställer till det. Inte alls ett pjåkigt resultat.
+
+Den viktigaste faktorn för ett spels risk visar sig vara spelets hastighet: hur snabbt man kan spela nästa runda. Detta förvånar inte, utan hänger väl ihop med [mitt tidigare påstående](http://rpubs.com/halhen/farliga-spel) att antal spelade rundor är den enskilt viktigaste markören för spelproblem.
+
+Tabellen nedan visar de tio faktorerna, rangordnade från mest viktig till minst så.
+
+```{r}
+library(dplyr)
+library(tibble)
+library(scales)
+
+df <- frame_data(
+  ~name, ~expl, ~weight, ~min, ~max,
+  "Hastighet", "Tid mellan två dragningar", 0.612, 0, 4,
+  "Utbetalning", "Tid mellan vinst och ubetalning", 0.157, 0.5, 4,
+  "Jackpot", "Storlek på progressiv jackpot", 0.171, 0, 4,
+  "Kontinuitet", "Tid man kan spela utan avbrott", 0.092, 0, 4,
+  "Vinstfrekvens", "Sannolikhet för vinst, inkl lägre än insats", 0.264, 1, 4,
+  "Tillgänglighet", "Närhet till spel", 0.173, 1, 3.5,
+  "Flera spelmöjligheter", "Antal insatser eller spel per runda", 0.354, 2, 4,
+  "Variabel insats", "Insatsens möjliga storlek", 0.184, 2, 4,
+  "Ljud- eller ljuseffekter", "Ljud/ljuseffekter under spelet", 0.230, 0, 3,
+  "Nästan-vinster", "Nästan-vinster", 0.143, 1, 4
+)
+
+df %>%
+  mutate(range = weight * (max - min)) %>%
+  arrange(desc(range)) %>%
+  mutate(p.range = range / sum(range)) %>%
+  transmute("Namn" = name, "Förklaring" = expl, "Vikt" = percent(p.range)) %>%
+  knitr::kable(align=c('l', 'l', 'r'))
+```
+
+Givet veckans debatt är det särskilt värt att notera är att återbetalning inte alls återfinns i tabellen. Faktorn förtjänar inte ens en topp-tio-plats. Denna studie är inte ensam om att räkna bort återbetalning. Det finns [en bred konsensus](http://www.egba.eu/facts-and-figures/studies/payback-percentage-and-problem-gaming/) att återbetalning inte driver ett spels farlighetsgrad, mer än möjligen indirekt.
+
+Statistik är det subtilas konst. Visst har snabba spel ofta en hög återbetalningsgrad och långsamma en låg. Därför verkar det rimligt att det ska finnas ett samband mellan just återbetalning och risk. Och om man endast och allenast tittar på återbetalningsgrad hittar man faktiskt ett samband mellan de tu. Den ack så viktiga poängen är att *sambandet förklaras bättre av andra faktorer*, viktigast av dem hastighet.
+
+Och för att ge två motexempel på återbetalning/risk: Onlinebingo och Black Jack på Kasino är två exempel på spel med snarlik farlighetsgrad men vitt skiljda återbetalningsgrader^[Bingo: 60%, Black Jack: 99.5%].
+
+`r tufte::newthought("Betänk nu")` att vi i diskussionen inte ens nått till vilka av dessa samband som är kausala eller handlingsbara. Det verkar rimligt att man gör en slot-maskin säkrare genom att förlänga snurren från tre sekunder till en halvtimme. Men per de flesta rimliga definitioner blir då ett annat spel.
+
+Så innan vi kastar ur oss [hittepå-förslag](https://twitter.com/likavillkor_nu/status/768470772587331584)^[Poker med 90% återbetalning?! Det är plågsamt nog att spela restaurang-Black Jack med 95%.] vore det välkommet att kasta åtminstone en liten blick mot den forskning som faktiskt finns.
+
+Tills dess bjuder eder ödmjuke skribent upp att själva fippla runt med ett spels egenskaper för att uppskatta dess risk, allt genom Meyers glasögon. Välj bland de tio faktorerna och beskåda krysset vandra upp och ned på det möjliga eländets gradient.
+
+Mycket nöje.
+
+
+```{r}
+theme_blank <- function(...) {
+  ret <- theme_bw(...)
+  ret$line <- element_blank()
+  ret$rect <- element_blank()
+  ret$strip.text <- element_blank()
+  ret$axis.text <- element_blank()
+  ret$plot.title <- element_blank()
+  ret$axis.title <- element_blank()
+  ret$plot.margin <- structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit")
+  ret
+}
+```
+
+```{r fig.width=10, fig.height=2}
+library(ggplot2)
+library(tibble)
+library(scales)
+
+
+inputPanel(
+  selectInput("frequency", label = "Tid mellan två dragningar",
+              choices = c("6+ dagar"=0, '1-6 dagar'=1, '4-24 timmar'=1.5, '30 min - 4 timmar'=2, '3-30 minuter'=2.5, '1-3 minuter'=3, '15-60 sekunder'=3.5, '-15 sekunder'=4),
+              selected = 3.5),
+  selectInput("cashout", label = "Tid mellan vinst och utbetalning",
+              choices = c("3+ dagar"=0.5, '1-3 dagar'=1, '4-24 timmar'=1.5, '30 min - 4 timmar'=2, '3-30 minuter'=2.5, '1-3 minuter'=3, '15-60 sekunder'=3.5, '-15 sekunder'=4),
+              selected = 3.5),
+  selectInput("jackpot", "Storlek på progressiv jackpot",
+              choices = c("Ingen"=0, "€0-€99"=1, "€100-€999"=1.5, "€1,000-€9,999"=2, "€10,000-€99,999"=2.5, "€100,000-€999,999"=3, "€1M-€50M"=3.5, "€50M+"=4),
+              selected=0),
+  selectInput("continuity", "Tid man kan spela utan avbrott",
+              choices = c("0-5 min"=0, "5-15 min"=1, "15-30 min"=2, "30-60 min"=3, "1-3 timmar"=3.5, "3+ timmar"=4),
+              selected=4),
+  selectInput("win", "Sannolikhet för vinst",
+              choices = c("0%-4%"=1, "4%-24%"=2, "24%-49%"=3, "49+%"=4),
+              selected=3),
+  selectInput("availabilty", "Närhet till spel",
+              choices = c("100+km" = 1, "Inom 10-100km"=2, "Inom 10km"=3, "Hemma eller på jobbet"=3.5),
+              selected=3.5),
+  selectInput("multigame", "Antal insatser/spel",
+              choices = c("Ett spel, en insats" = 2, "Ett spel, flera insatser" = 3, "Flera spel, flera insatser" = 4),
+              selected=2),
+  selectInput("varstake", "Insatsens storlek",
+              choices = c("Fast insats" = 2, "Variabel men begränsad insats"=3, "Obegränsad insats"=4),
+              selected=3),
+  selectInput("lightsound", "Ljud/ljuseffekter",
+              choices = c("Inga"=0, "Ljud eller ljus"=2, "Ljud och ljus"=3),
+              selected=3),
+  selectInput("nearmiss", "Nästan-vinster",
+              choices = c("Inga avsiktliga, slumpmässiga" = 1, "Avsiktliga, frekventa" = 4),
+              selected=1)
+)
+
+
+renderPlot({
+  score <- as.numeric(input$frequency) * 0.612 +
+           as.numeric(input$multigame) * 0.354 +
+           as.numeric(input$win) * 0.264 +
+           as.numeric(input$lightsound) * 0.230 +
+           as.numeric(input$varstake) * 0.184 +
+           as.numeric(input$availabilty) * 0.173 +
+           as.numeric(input$jackpot) * 0.171 +
+           as.numeric(input$cashout) * 0.157 +
+           as.numeric(input$nearmiss) * 0.143 +
+           as.numeric(input$continuity) * 0.092
+    
+  df.games <- frame_data(
+    ~game, ~score,
+    "Postkodlotteriet", 3.028,
+    "Lotto med Jackpot", 4.158,
+    "Blackjack\nKasino", 5.9545,
+    "Blackjack\nOnline", 6.674,
+    "Multiline slot\nOnline", 8.4945
+  )
+  
+  df.tmp <- frame_data(
+    ~game, ~score,
+    paste0(score), score
+  )
+  
+  df.bg <- data.frame(score=seq(1.70, 9.25, by=0.05))
+  
+  ggplot(df.tmp, aes(x=score, y=1)) +
+    geom_line(data=df.bg, aes(color=score), size=25) +
+    geom_text(data=df.games, aes(y=1.015, label=game)) +
+    geom_segment(data=df.games, aes(x=score, xend=score, y=0.995, yend=1.01)) +
+    #geom_label(aes(label=game)) +
+    geom_point(size=7, shape="X") +
+    scale_y_continuous(limits=c(0.95, 1.05)) +
+    scale_color_gradient2(low="green", mid="yellow", high="red", midpoint=mean(df.bg$score)) +
+    theme_blank() +
+      theme(legend.position="None")
+})
+```
+
