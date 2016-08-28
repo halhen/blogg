@@ -1,0 +1,7 @@
+name: Publish Document
+account: rpubs
+server: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/203194/f84942a7ca3242099cb8d782b243670a
+bundleId: https://api.rpubs.com/api/v1/document/203194/f84942a7ca3242099cb8d782b243670a
+url: http://rpubs.com/halhen/203194
+when: 1471713323.22979
