@@ -37,7 +37,7 @@ Efterhand byxorna blir allt trängre och trapporna allt längre, blir man *ambvi
 
 Till slut bestämmer man sig, och tar *handling*. Om förändringen är framgångsrik behåller man sitt nya beteende. Ofta blir det inte så. En dag finner man sig i soffan med magen full av Ben & Jerrys och bestämmer sig för att man nog ändå behövde lite nya kläder. Man är tillbaka i *inte beredd* och påbörjar snart ett nytt varv i cykeln.
 
-`r tufte::margin_note("Bild: Folkhälsoinstitutet")`
+`r tufte::margin_note("Bild: Folkhälsomyndigheten")`
 
 ![](forandringshjul.gif)
 
